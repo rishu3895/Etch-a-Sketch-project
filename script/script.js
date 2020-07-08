@@ -1,60 +1,65 @@
-let userColor = 'black';
-let gridContainer = document.getElementById('grid-container');
+let userColor='black';
+let gridContainer=document.querySelector('.container');
 
-function createGrid(size) {
-    gridContainer.style.display = 'grid';
-    gridContainer.style.gridTemplateColumns = `repeat(${size},1fr)`;
-    gridContainer.style.gridTemplateRows = `repeat(${size},1fr)`;
-    createGridSquare(size);
+// create the grid inside the gridContainer
+function createGrid(size){
+    gridContainer.style.display='grid';
+    gridContainer.style.gridTemplateColumns=`repeat(${size},1fr)`;
+    gridContainer.style.gridTemplateRows=`repeat(${size},1fr)`;
+    createElement(size);
 }
-createGrid(32);
-function createGridSquare(size) {
-    let userClick = false;
-    for (let i = 0; i < size * size; i++) {
-        let gridSquare = document.createElement('div');
-        gridSquare.classList.add('grid-square');
-        gridContainer.appendChild(gridSquare);
 
-        gridSquare.addEventListener('mousedown', () => {
-            userClick = true;
+// create and initial grid of size 10
+createGrid(10);
+
+// creating grid squares or divisions
+function createElement(size){
+    let userClick = false;
+    for(let i=0;i<size*size;i++){
+        let newDiv=document.createElement('div');
+        newDiv.classList.add('gridSquare');
+        gridContainer.appendChild(newDiv);
+
+        newDiv.addEventListener('mousedown',()=>{
+            userClick=true;
             console.log(userClick);
         });
-        gridSquare.addEventListener('mouseup', () => {
-            userClick = false;
+        newDiv.addEventListener('mouseup',()=>{
+            userClick=false;
             console.log(userClick);
         });
-        gridSquare.addEventListener('mouseover', () => {
-            if (userClick == true) {
-                if (userColor === 'black') {
-                    gridSquare.style.backgroundColor = 'black';
+
+        newDiv.addEventListener('mouseover',()=>{
+            if(userClick===true){
+                if(userColor==='black'){
+                    newDiv.style.backgroundColor='black';
                 }
-                else if (userColor === 'red') {
-                    gridSquare.style.backgroundColor = 'red';
+                else if(userColor==='red'){
+                    newDiv.style.backgroundColor="red";
                 }
-                else if (userColor === 'white') {
-                    gridSquare.style.backgroundColor = 'white';
+                else if(userColor==='white'){
+                    newDiv.style.backgroundColor='white';
                 }
-                else if (userColor === 'rainbow') {
-                    let red = Math.floor(Math.random() * 256) + 1;
-                    let green = Math.floor(Math.random() * 256) + 1;
-                    let blue = Math.floor(Math.random() * 256) + 1;
-                    gridSquare.style.backgroundColor = `rgb(${red},${green},${blue})`;
+                else if(userColor==='rainbow'){
+                    let red=Math.floor(Math.random()*255)+1;
+                    let green=Math.floor(Math.random()*255)+1;
+                    let blue=Math.floor(Math.random()*255)+1;
+                    newDiv.style.backgroundColor=`rgb(${red},${green},${blue})`;
                 }
-            }
+            }            
         });
     }
 }
-document.querySelector('#clear').addEventListener('click', ()=>{
-    console.log('function found');
-    let gridSquare=document.querySelectorAll('.grid-square');
+
+// adding functionality to clear button 
+document.querySelector('#clear').onclick=function(){
+    let gridSquare=document.querySelectorAll('.gridSquare');
     gridSquare.forEach(element => {
         element.style.backgroundColor='white';
-        console.log('another found');
-    });
-});
+    });    
+}
 
-
-
+// setting userColor
 document.querySelector('#black').addEventListener('click',()=>{
     userColor='black';
 });
@@ -68,14 +73,26 @@ document.querySelector('#all-colors').addEventListener('click',()=>{
     userColor='rainbow';
 });
 
-document.querySelector('#change-grid-size').addEventListener('click',()=>{
-    let grid=document.querySelectorAll('.grid-square');
-    grid.forEach(element => {
-        gridContainer.removeChild(gridContainer.lastChild);
-    }); 
+// change grid size
 
-    let size=prompt('enter the size between 1 and 128');
-    createGrid(size);
-});
+function deleteGrid(){
+    let gridSquare=document.querySelectorAll('.gridSquare');
+    let container=document.querySelector('.container');
+    gridSquare.forEach(element => {
+        container.removeChild(container.lastChild);
+    });
+}
+document.querySelector('#change-grid-size').onclick=function(){
+    let size=prompt('Enter the size of the sketch area between 1 and 128');
+    if(size>=1 && size<=128){
+        deleteGrid();
+        createGrid(size);
+    }
+    else{
+        alert('enter the correct size of the grid');   
+    }
+}
+
+
 
 
